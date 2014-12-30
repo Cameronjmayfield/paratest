@@ -162,6 +162,10 @@ class ResultPrinter
     public function printFeedback(ExecutableTest $test)
     {
         $reader = new Reader($test->getTempFile());
+        if (!$reader->hasResults()) {
+            throw new \RuntimeException("Log file " . $test->getTempFile() . " is empty.
+                This means a PHPUnit process was unable to run " . $test->getPath());
+        }
         $this->results->addReader($reader);
         $feedbackItems = $reader->getFeedback();
         foreach ($feedbackItems as $item)

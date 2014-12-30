@@ -6,6 +6,7 @@ use ParaTest\ResultTester;
 
 class ResultPrinterTest extends ResultTester
 {
+    /** @var  ResultPrinter */
     protected $printer;
     protected $interpreter;
 
@@ -252,6 +253,16 @@ class ResultPrinterTest extends ResultTester
         for($i = 0; $i < 57; $i++)
             $expected .= '.';
         $this->assertEquals($expected, $feedback);
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testEmptyResultsLog(){
+        $suite = new Suite('/path/to/ResultSuite.php', array());
+        $empty = FIXTURES . DS . 'results' . DS . 'empty-test-suite.xml';
+        file_put_contents($suite->getTempFile(), file_get_contents($empty));
+        $this->printer->printFeedback($suite);
     }
 
     protected function getStartOutput(Options $options)
