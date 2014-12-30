@@ -6,13 +6,16 @@ class ReaderTest extends \TestBase
     protected $mixedPath;
     protected $mixed;
     protected $single;
+    protected $empty;
 
     public function setUp()
     {
         $this->mixedPath = FIXTURES . DS . 'results' . DS . 'mixed-results.xml';
         $single = FIXTURES . DS . 'results' . DS . 'single-wfailure.xml';
+        $empty = FIXTURES . DS . 'results' . DS . 'empty-header.xml';
         $this->mixed = new Reader($this->mixedPath);
         $this->single = new Reader($single);
+        $this->empty = new Reader($empty);
     }
 
     /**
@@ -161,6 +164,15 @@ class ReaderTest extends \TestBase
         $this->assertEquals(1, $this->single->getTotalFailures());
         $this->assertEquals(0, $this->single->getTotalErrors());
         $this->assertEquals(0.005895, $this->single->getTotalTime());
+    }
+
+    public function testEmptyGetTotals()
+    {
+        $this->assertEquals(0, $this->empty->getTotalTests());
+        $this->assertEquals(0, $this->empty->getTotalAssertions());
+        $this->assertEquals(0, $this->empty->getTotalFailures());
+        $this->assertEquals(0, $this->empty->getTotalErrors());
+        $this->assertEquals(0, $this->empty->getTotalTime());
     }
 
     public function testMixedGetFailureMessages()
